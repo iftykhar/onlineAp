@@ -138,13 +138,13 @@ const Navbar = ({ user }: { user: any }) => {
                     <div className="w-10 h-10 rounded-full bg-gray-200 overflow-hidden">
                       <img
                         src={user.avatar || "/images/default-avatar.png"}
-                        alt={`${user.username || "Default"} avatar`}
+                        alt={`${user.fullName || "User"} avatar`}
                         className="w-full h-full object-cover"
                       />
                     </div>
                     <div className="text-left hidden sm:block">
-                      <p className="text-[#1f2937] font-bold text-sm leading-tight">{user.username}</p>
-                      <p className="text-gray-500 text-xs">Ref. ID - {user.refId}</p>
+                      <p className="text-[#1f2937] font-bold text-sm leading-tight">{user.fullName}</p>
+                      <p className="text-gray-500 text-xs">Ref. ID - {user.id.slice(-6).toUpperCase()}</p>
                     </div>
                     <ChevronDown size={18} className="text-gray-400 group-hover:text-gray-600 transition-colors" />
                   </div>

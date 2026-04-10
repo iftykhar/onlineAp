@@ -260,7 +260,15 @@ export function LoginForm() {
 
       if (response?.ok && !response.error) {
         toast.success("Login successful!");
-        router.push(callbackUrl);
+        // Fetch session to check role for redirection
+        const { getSession } = await import("next-auth/react");
+        const session = await getSession();
+        
+        if (session?.user?.role === "admin") {
+          router.push("/admin/dashboard");
+        } else {
+          router.push("/dashboard");
+        }
       } else {
         toast.error(response?.error || "Invalid credentials");
       }

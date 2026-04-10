@@ -6,24 +6,35 @@ import  Navbar  from "@/components/shared/navbar";
 import  Footer  from "@/components/shared/footer";
 import { usePathname } from "next/navigation";
 import { useLocale } from "next-intl";
+import { SessionProvider, useSession } from "next-auth/react";
+
+function AppContent({ children }: { children: React.ReactNode }) {
+  const queryClient = new QueryClient();
+  const pathname = usePathname();
+  const currentLocale = useLocale();
+  const { data: session } = useSession();
+
+  const hideNavAndFooter = [`/${currentLocale}/auth/login`];
+
+  return (
+    <QueryClientProvider client={queryClient}>
+      {!hideNavAndFooter.includes(pathname) && (
+        <Navbar user={session?.user} />
+      )}
+      {children}
+      {!hideNavAndFooter.includes(pathname) && <Footer />}
+    </QueryClientProvider>
+  );
+}
 
 export default function AppProvider({
   children,
 }: {
   children: React.ReactNode;
 }) {
-  const queryClient = new QueryClient();
-
-  const pathname = usePathname();
-  const currentLocale = useLocale();
-
-  const hideNavAndFooter = [`/${currentLocale}/auth/login`, `/${currentLocale}/auth/signup`]
-
   return (
-    <QueryClientProvider client={queryClient}>
-      {!hideNavAndFooter.includes(pathname) && <Navbar user={undefined} />}
-      {children}
-      {!hideNavAndFooter.includes(pathname) && <Footer />}
-    </QueryClientProvider>
+    <SessionProvider>
+      <AppContent>{children}</AppContent>
+    </SessionProvider>
   );
 }
