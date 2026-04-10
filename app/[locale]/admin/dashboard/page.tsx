@@ -1,9 +1,11 @@
+//app/admin/dashboard/page.tsx
+import AdminDashboard from '@/components/admin/dashboard/AdminDashboard'
 import React from 'react'
 
 const page = () => {
   return (
-    <div>
-      
+    <div className='min-h-screen'>
+      <AdminDashboard />
     </div>
   )
 }
