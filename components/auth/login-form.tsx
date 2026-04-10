@@ -277,7 +277,7 @@ export function LoginForm() {
   return (
     <div className="flex justify-center items-center h-screen">
       <div className="container">
-        <div className="flex flex-col lg:flex-row justify-between bg-primary/20 rounded-2xl h-auto lg:h-150 overflow-hidden">
+        <div className="flex flex-col lg:flex-row justify-between  rounded-2xl h-auto lg:h-150 overflow-hidden">
          
 
           {/* Right section */}
@@ -287,77 +287,80 @@ export function LoginForm() {
                 {tAuth("signIn")}
               </h2>
 
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                  {/* Email */}
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm sm:text-base">{tAuth("email")}</FormLabel>
-                        <FormControl>
-                          <Input
-                            type="email"
-                            placeholder={tAuth("enterEmail")}
-                            {...field}
-                            className="h-10 sm:h-12 text-sm sm:text-base"
-                          />
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
-
-                  {/* Password */}
-                  <FormField
-                    control={form.control}
-                    name="password"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-sm sm:text-base">{tAuth("password")}</FormLabel>
-                        <FormControl>
-                          <div className="relative">
+              <div className="bg-gray-100/50   p-10 rounded-2xl">
+                
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+                    {/* Email */}
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm sm:text-base">{tAuth("email")}</FormLabel>
+                          <FormControl>
                             <Input
-                              type={showPassword ? "text" : "password"}
-                              placeholder={tAuth("enterPassword")}
+                              type="email"
+                              placeholder={tAuth("enterEmail")}
                               {...field}
                               className="h-10 sm:h-12 text-sm sm:text-base"
                             />
-                            <button
-                              type="button"
-                              className="absolute top-1/2 right-4 transform -translate-y-1/2"
-                              onClick={() => setShowPassword(!showPassword)}
-                            >
-                              {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
-                            </button>
-                          </div>
-                        </FormControl>
-                        <FormMessage className="text-red-500" />
-                      </FormItem>
-                    )}
-                  />
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
 
-                  {/* Forgot Password */}
-                  <div className="flex justify-center">
-                    <Link href="/forgot-password" className="text-xs sm:text-sm text-[#0a1155] hover:underline">
-                      {tAuth("forgotPassword")}
-                    </Link>
-                  </div>
+                    {/* Password */}
+                    <FormField
+                      control={form.control}
+                      name="password"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-sm sm:text-base">{tAuth("password")}</FormLabel>
+                          <FormControl>
+                            <div className="relative">
+                              <Input
+                                type={showPassword ? "text" : "password"}
+                                placeholder={tAuth("enterPassword")}
+                                {...field}
+                                className="h-10 sm:h-12 text-sm sm:text-base"
+                              />
+                              <button
+                                type="button"
+                                className="absolute top-1/2 right-4 transform -translate-y-1/2"
+                                onClick={() => setShowPassword(!showPassword)}
+                              >
+                                {showPassword ? <Eye className="h-5 w-5" /> : <EyeOff className="h-5 w-5" />}
+                              </button>
+                            </div>
+                          </FormControl>
+                          <FormMessage className="text-red-500" />
+                        </FormItem>
+                      )}
+                    />
 
-                  {/* Submit */}
-                  <Button
-                    type="submit"
-                    disabled={isLoading}
-                    className="w-full h-10 sm:h-12 bg-primary hover:bg-primary/90 text-sm sm:text-base font-bold text-white cursor-pointer"
-                  >
-                    {isLoading ? "Logging in..." : tAuth("signIn")}
-                  </Button>
-                </form>
-              </Form>
+                    {/* Forgot Password */}
+                    <div className="flex justify-end">
+                      <Link href="/forgot-password" className="text-xs sm:text-sm text-[#0a1155] hover:underline">
+                        {tAuth("forgotPassword")}
+                      </Link>
+                    </div>
+
+                    {/* Submit */}
+                    <Button
+                      type="submit"
+                      disabled={isLoading}
+                      className="w-full h-10 sm:h-12 bg-primary hover:bg-primary/90 text-sm sm:text-base font-bold text-white cursor-pointer"
+                    >
+                      {isLoading ? "Logging in..." : tAuth("signIn")}
+                    </Button>
+                  </form>
+                </Form>
+              </div>
 
               {/* Mobile-only Register Link */}
-              <div className="lg:hidden text-center mt-4">
+              {/* <div className="lg:hidden text-center mt-4">
                 <p className="text-sm text-primary mb-2">{tAuth("donthaveAcc")}</p>
                 <Link href="/auth/signup">
                   <Button
@@ -367,7 +370,7 @@ export function LoginForm() {
                     {tAuth("register")}
                   </Button>
                 </Link>
-              </div>
+              </div> */}
             </div>
           </div>
         </div>
