@@ -32,7 +32,7 @@ axiosInstance.interceptors.response.use(
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
-        await signOut({ callbackUrl: "/auth/login" });
+        await signOut({ callbackUrl: "/auth/signin" });
         return Promise.reject(err);
       }
     }

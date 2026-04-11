@@ -74,7 +74,7 @@ const Navbar = ({ user }: { user: any }) => {
                       {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</li>
                       <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Settings</li> */}
                       <li
-                        onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                        onClick={() => signOut({ callbackUrl: "/auth/signin" })}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600 font-medium"
                       >
                         Logout
@@ -94,7 +94,7 @@ const Navbar = ({ user }: { user: any }) => {
                       {/* <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Profile</li>
                       <li className="px-4 py-2 hover:bg-gray-100 cursor-pointer">Settings</li> */}
                       <li
-                        onClick={() => signOut({ callbackUrl: "/auth/login" })}
+                        onClick={() => signOut({ callbackUrl: "/auth/signin" })}
                         className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-600 font-medium"
                       >
                         Logout

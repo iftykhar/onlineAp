@@ -47,7 +47,7 @@ export function ForgetPasswordForm() {
 
       if (res.data.success) {
         toast.success("Password reset successfully!");
-        router.push("/auth/login");
+        router.push("/auth/signin");
       }
     } catch (error: any) {
       toast.error(error.response?.data?.message || "Failed to reset password.");

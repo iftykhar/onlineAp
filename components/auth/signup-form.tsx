@@ -185,7 +185,7 @@ export function RegisterForm() {
               <p className="text-sm sm:text-base lg:text-lg font-medium text-white mb-6">
                 {tAuth("haveAcc")}
               </p>
-              <Link href="/auth/login">
+              <Link href="/auth/signin">
                 <Button className="px-6 py-2 sm:px-8 sm:py-3 border border-white text-sm sm:text-base font-semibold  hover:bg-white hover:text-primary text-white rounded-md">
                   {tAuth("signIn")}
                 </Button>

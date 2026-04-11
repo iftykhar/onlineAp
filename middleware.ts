@@ -29,14 +29,14 @@ export async function middleware(req: NextRequest) {
   // but next-auth getToken handles req context well.
   const isAdminRoute = pathname.includes("/admin");
   const isDashboardRoute = pathname.includes("/dashboard");
-  const isAuthPage = pathname.includes("/auth/login"); // No signup anymore
+  const isAuthPage = pathname.includes("/auth/signin"); // No signup anymore
 
   // 4. Redirect Logic
   
   // If trying to access protected route without token
   if ((isAdminRoute || isDashboardRoute) && !token) {
     const locale = pathname.split("/")[1] || "bn";
-    const loginUrl = new URL(`/${locale}/auth/login`, req.url);
+    const loginUrl = new URL(`/${locale}/auth/signin`, req.url);
     loginUrl.searchParams.set("callbackUrl", pathname);
     return NextResponse.redirect(loginUrl);
   }

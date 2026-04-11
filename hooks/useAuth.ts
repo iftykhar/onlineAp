@@ -37,7 +37,7 @@ export function useAuth() {
   };
 
   const logout = async () => {
-    await signOut({ callbackUrl: "/auth/login" });
+    await signOut({ callbackUrl: "/auth/signin" });
   };
 
   const isAdmin = user?.role === "admin";
