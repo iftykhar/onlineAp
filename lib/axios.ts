@@ -1,16 +1,16 @@
 import axios from "axios";
-import { useAuthStore } from "@/app/store/useAuthStore";
+import { getSession, signOut } from "next-auth/react";
 
 const axiosInstance = axios.create({
   baseURL: process.env.NEXT_PUBLIC_BACKEND_API_URL,
   withCredentials: true,
 });
 
-// Request Interceptor
-axiosInstance.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
+// Request Interceptor — attach accessToken from NextAuth session
+axiosInstance.interceptors.request.use(async (config) => {
+  const session = await getSession();
+  if (session?.user?.accessToken) {
+    config.headers.Authorization = `Bearer ${session.user.accessToken}`;
   }
   return config;
 });
@@ -29,12 +29,10 @@ axiosInstance.interceptors.response.use(
           { withCredentials: true }
         );
         const newToken = data.data.accessToken;
-        useAuthStore.getState().setAccessToken(newToken);
         originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return axiosInstance(originalRequest);
       } catch (err) {
-        useAuthStore.getState().clearAuth();
-        // window.location.href = "/auth/login";
+        await signOut({ callbackUrl: "/auth/login" });
         return Promise.reject(err);
       }
     }

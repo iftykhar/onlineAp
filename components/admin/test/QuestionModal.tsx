@@ -2,6 +2,8 @@
 import React, { useState, useEffect } from 'react'
 import { X, Plus, Trash2, CheckCircle2, Circle, Square, Check } from 'lucide-react'
 import { useTestCreationStore } from '@/app/store/useTestCreationStore';
+import { useAddQuestion, useUpdateQuestion } from '@/hooks/useExams';
+import { toast } from 'sonner';
 
 interface QuestionModalProps {
   isOpen: boolean;
@@ -10,11 +12,14 @@ interface QuestionModalProps {
 }
 
 const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => {
-  const addQuestion = useTestCreationStore((state) => state.addQuestion);
+  const { addQuestion, examId } = useTestCreationStore();
+  const addQuestionMutation = useAddQuestion();
+  const updateQuestionMutation = useUpdateQuestion();
   
   const [title, setTitle] = useState(initialData?.title || '');
   const [type, setType] = useState<'radio' | 'checkbox' | 'text'>(initialData?.type || 'radio');
   const [options, setOptions] = useState<string[]>(initialData?.options || ['', '']);
+  const [isSaving, setIsSaving] = useState(false);
   
   // Initialize correctAnswer based on type
   const [correctAnswer, setCorrectAnswer] = useState<any>(
@@ -65,26 +70,66 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
     }
   };
 
-  const handleSave = () => {
-    if (!title.trim()) return alert("Please enter a question title");
+  const handleSave = async () => {
+    if (!title.trim()) return toast.error("Please enter a question title");
     
     const finalOptions = options.filter(opt => opt.trim() !== '');
-    if (type !== 'text' && finalOptions.length < 2) return alert("Please provide at least 2 options");
+    if (type !== 'text' && finalOptions.length < 2) return toast.error("Please provide at least 2 options");
+    
+    if (type !== 'text') {
+      if (type === 'radio' && !correctAnswer) return toast.error("Please select a correct answer");
+      if (type === 'checkbox' && (!Array.isArray(correctAnswer) || correctAnswer.length === 0)) return toast.error("Please select at least one correct answer");
+    }
 
-    const newQuestion = {
-      id: initialData?.id || Math.random().toString(36).substr(2, 9),
+    if (!examId) {
+      return toast.error("Exam ID is missing. Please save basic info first.");
+    }
+
+    const payload = {
       title,
       type,
       options: type === 'text' ? [] : finalOptions,
       correctAnswer: type === 'text' ? null : correctAnswer,
     };
 
-    addQuestion(newQuestion);
-    onClose();
+    setIsSaving(true);
+    try {
+      if (initialData?.id) {
+        // Update existing question
+        await updateQuestionMutation.mutateAsync({
+          examId,
+          questionId: initialData.id,
+          data: payload
+        });
+        
+        addQuestion({
+          id: initialData.id,
+          ...payload
+        });
+        toast.success("Question updated!");
+      } else {
+        // Add new question
+        const newQuestion = await addQuestionMutation.mutateAsync({
+          examId,
+          question: payload
+        });
+        
+        addQuestion({
+          id: newQuestion._id,
+          ...payload
+        });
+        toast.success("Question added!");
+      }
+      onClose();
+    } catch (err: any) {
+      toast.error(err?.response?.data?.message || "Failed to save question");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
+    <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/40 backdrop-blur-sm p-4">
       <div className="bg-white w-full max-w-2xl rounded-[32px] shadow-2xl overflow-hidden animate-in fade-in zoom-in duration-200">
         
         {/* Modal Header */}
@@ -204,10 +249,15 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
             Cancel
           </button>
           <button
+            disabled={isSaving}
             onClick={handleSave}
-            className="flex-1 py-4 px-4 rounded-2xl bg-[#8b5cf6] text-white font-bold hover:bg-purple-700 transition-all shadow-lg shadow-purple-100 flex items-center justify-center gap-2 active:scale-[0.98]"
+            className="flex-1 py-4 px-4 rounded-2xl bg-[#8b5cf6] text-white font-bold hover:bg-purple-700 transition-all shadow-lg shadow-purple-100 flex items-center justify-center gap-2 active:scale-[0.98] disabled:opacity-50"
           >
-            <CheckCircle2 className="w-5 h-5" />
+            {isSaving ? (
+              <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+            ) : (
+              <CheckCircle2 className="w-5 h-5" />
+            )}
             {initialData ? 'Update Question' : 'Save Question'}
           </button>
         </div>

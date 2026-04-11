@@ -1,14 +1,16 @@
 "use client"
-import React from 'react';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTestCreationStore } from '@/app/store/useTestCreationStore';
 import { BasicInfoFormData, basicInfoSchema } from '@/app/schema/testSchema';
-// import { useTestCreationStore } from '@/store/useTestCreationStore';
-// import { basicInfoSchema, BasicInfoFormData } from '@/schema/testSchema';
+import { useCreateExam } from '@/hooks/useExams';
+import { toast } from 'sonner';
 
 const BasicInfoForm = () => {
-  const { basicInfo, updateBasicInfo, setStep } = useTestCreationStore();
+  const { basicInfo, updateBasicInfo, setStep, setExamId, examId } = useTestCreationStore();
+  const createExam = useCreateExam();
+  const [isSaving, setIsSaving] = useState(false);
 
   const {
     register,
@@ -19,9 +21,38 @@ const BasicInfoForm = () => {
     defaultValues: basicInfo as BasicInfoFormData,
   });
 
-  const onSubmit = (data: BasicInfoFormData) => {
+  const onSubmit = async (data: BasicInfoFormData) => {
     updateBasicInfo(data);
-    setStep(2); // Move to Question Sets
+
+    // If exam already created (editing), just go to step 2
+    if (examId) {
+      setStep(2);
+      return;
+    }
+
+    // Create exam on backend
+    setIsSaving(true);
+    try {
+      const result = await createExam.mutateAsync({
+        title: data.title,
+        totalCandidates: Number(data.totalCandidates),
+        totalSlots: Number(data.totalSlots),
+        questionSets: Number(data.questionSets),
+        questionType: data.questionType,
+        startTime: data.startTime,
+        endTime: data.endTime,
+        duration: Number(data.duration),
+        negativeMarking: data.negativeMarking || "No Negative Marking",
+      });
+
+      setExamId(result._id);
+      toast.success("Exam created successfully!");
+      setStep(2);
+    } catch (error: any) {
+      toast.error(error?.response?.data?.message || "Failed to create exam");
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   return (
@@ -74,7 +105,7 @@ const BasicInfoForm = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
            {/* Question Type */}
            <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Question Type</label>
@@ -95,6 +126,16 @@ const BasicInfoForm = () => {
               type="number"
               {...register('duration')}
               placeholder="e.g. 60"
+              className="w-full p-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100"
+            />
+          </div>
+
+          {/* Negative Marking */}
+          <div className="space-y-2">
+            <label className="text-sm font-semibold text-slate-700">Negative Marking</label>
+            <input
+              {...register('negativeMarking')}
+              placeholder="e.g. -0.25/wrong"
               className="w-full p-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100"
             />
           </div>
@@ -126,9 +167,10 @@ const BasicInfoForm = () => {
         <div className="flex justify-end pt-6">
           <button
             type="submit"
-            className="px-12 py-4 bg-[#8b5cf6] text-white font-bold rounded-2xl shadow-lg shadow-purple-100 hover:bg-[#7c3aed] transition-all active:scale-95"
+            disabled={isSaving}
+            className="px-12 py-4 bg-[#8b5cf6] text-white font-bold rounded-2xl shadow-lg shadow-purple-100 hover:bg-[#7c3aed] transition-all active:scale-95 disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Save & Continue
+            {isSaving ? "Creating..." : examId ? "Save & Continue" : "Create & Continue"}
           </button>
         </div>
       </form>

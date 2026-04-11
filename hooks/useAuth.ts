@@ -1,50 +1,58 @@
-import { useAuthStore } from "@/app/store/useAuthStore";
+"use client";
+
+import { useSession, signIn, signOut } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import axiosInstance from "@/lib/axios";
 
 export function useAuth() {
-  const { user, accessToken, isAuthenticated, setAuth, clearAuth } =
-    useAuthStore();
+  const { data: session, status } = useSession();
   const router = useRouter();
 
+  const user = session?.user
+    ? {
+        id: session.user.id,
+        fullName: session.user.fullName,
+        email: session.user.email!,
+        role: session.user.role as "admin" | "user",
+        avatar: session.user.avatar,
+      }
+    : null;
+
   const login = async (email: string, password: string) => {
-    try {
-      const { data } = await axiosInstance.post("/auth/login", {
-        email,
-        password,
-      });
-      setAuth(data.data.user, data.data.accessToken);
-      const redirectTo =
-        data.data.user.role === "admin" ? "/admin/dashboard" : "/dashboard";
-      router.push(redirectTo);
-    } catch (error) {
-      console.error("Login failed:", error);
-      throw error;
+    const result = await signIn("credentials", {
+      email,
+      password,
+      redirect: false,
+    });
+
+    if (result?.error) {
+      throw new Error(result.error);
     }
+
+    // Refetch session to get the updated user data
+    // signIn with redirect:false doesn't auto-redirect, so we do it manually
+    const session = await fetch("/api/auth/session").then((r) => r.json());
+    const role = session?.user?.role;
+    const redirectTo = role === "admin" ? "/admin/dashboard" : "/dashboard";
+    router.push(redirectTo);
   };
 
   const logout = async () => {
-    try {
-      await axiosInstance.post("/auth/logout");
-      clearAuth();
-      router.push("/auth/login");
-    } catch (error) {
-      console.error("Logout failed:", error);
-      clearAuth();
-      router.push("/auth/login");
-    }
+    await signOut({ callbackUrl: "/auth/login" });
   };
 
   const isAdmin = user?.role === "admin";
   const isUser = user?.role === "user";
+  const isAuthenticated = status === "authenticated";
+  const isLoading = status === "loading";
 
   return {
     user,
-    accessToken,
     isAuthenticated,
+    isLoading,
     isAdmin,
     isUser,
     login,
     logout,
+    session,
   };
 }

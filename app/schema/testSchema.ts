@@ -9,6 +9,7 @@ export const basicInfoSchema = z.object({
   startTime: z.string().min(1, "Start time is required"),
   endTime: z.string().min(1, "End time is required"),
   duration: z.string().min(1, "Duration is required"),
+  negativeMarking: z.string().optional(),
 });
 
 export type BasicInfoFormData = z.infer<typeof basicInfoSchema>;
