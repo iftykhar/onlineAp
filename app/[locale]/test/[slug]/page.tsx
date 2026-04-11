@@ -6,6 +6,7 @@ import { useExamBySlug, useSubmitExam, useMySubmission } from '@/hooks/useExams'
 import { useAuth } from '@/hooks/useAuth';
 import { AlertCircle } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
+import FullScreenLoader from '@/components/shared/FullScreenLoader';
 
 export default function ExamPage() {
   const { slug } = useParams() as { slug: string };
@@ -164,11 +165,7 @@ export default function ExamPage() {
   }
 
   if (isLoadingExam || isLoadingSubmission) {
-    return (
-      <div className="min-h-screen bg-[#f8fafc] flex justify-center items-center">
-        <div className="w-10 h-10 border-4 border-indigo-200 border-t-indigo-600 rounded-full animate-spin"></div>
-      </div>
-    );
+    return <FullScreenLoader message="Preparing your exam environment..." />;
   }
 
   if (examError || !examData) {

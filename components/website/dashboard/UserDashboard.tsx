@@ -4,6 +4,7 @@ import React, { useState, useMemo } from 'react'
 import TestCards from './TestCards'
 import { Search } from 'lucide-react'
 import { useAvailableExams } from '@/hooks/useExams'
+import TestCardSkeleton from '@/components/shared/TestCardSkeleton'
 
 const UserDashboard = () => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -40,10 +41,10 @@ const UserDashboard = () => {
         </div>
       </div>
 
-      {/* Loading & Error States */}
+      {/* Loading State */}
       {isLoading && (
-        <div className="flex justify-center items-center py-20">
-          <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+        <div className="mt-8">
+          <TestCardSkeleton />
         </div>
       )}
 

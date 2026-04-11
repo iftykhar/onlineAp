@@ -3,6 +3,7 @@ import React from 'react'
 import { useParams, useRouter } from 'next/navigation'
 import { useExamSubmissions, useExamById } from '@/hooks/useExams'
 import { ArrowLeft, CheckCircle, Clock } from 'lucide-react'
+import FullScreenLoader from '@/components/shared/FullScreenLoader'
 
 export default function SubmissionsPage() {
   const { id } = useParams() as { id: string };
@@ -12,15 +13,11 @@ export default function SubmissionsPage() {
   const { data: submissions, isLoading: isLoadingSubmissions } = useExamSubmissions(id);
 
   if (isLoadingExam || isLoadingSubmissions) {
-    return (
-      <div className="flex justify-center items-center py-20">
-        <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
-      </div>
-    );
+    return <FullScreenLoader message="Fetching candidates..." />;
   }
 
   return (
-    <div className='container mx-auto py-10 px-4'>
+    <div className='container mx-auto py-10 px-4 min-h-screen'>
       <button 
         onClick={() => router.push('/admin/dashboard')}
         className="flex items-center gap-2 text-slate-500 hover:text-[#8b5cf6] mb-8 font-semibold transition-colors"

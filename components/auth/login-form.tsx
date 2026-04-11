@@ -350,7 +350,7 @@ export function LoginForm() {
 
                     {/* Forgot Password */}
                     <div className="flex justify-end">
-                      <Link href="/forgot-password" className="text-xs sm:text-sm text-[#0a1155] hover:underline">
+                      <Link href="/auth/forgetpassword" className="text-xs sm:text-sm text-[#0a1155] hover:underline">
                         {tAuth("forgotPassword")}
                       </Link>
                     </div>

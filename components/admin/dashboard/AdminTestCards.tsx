@@ -2,6 +2,7 @@ import React from 'react'
 import { Users, FileText, Clock } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link';
+import FullScreenLoader from '@/components/shared/FullScreenLoader';
 
 // Define the shape of your Test data
 interface TestData {
@@ -19,6 +20,8 @@ interface AdminTestCardsProps {
 }
 
 const AdminTestCards = ({ tests }: AdminTestCardsProps) => {
+  const [loadingMessage, setLoadingMessage] = React.useState<string | null>(null);
+
   // --- Empty State UI (Triggers if tests array is empty) ---
   if (tests.length === 0) {
     return (
@@ -38,8 +41,10 @@ const AdminTestCards = ({ tests }: AdminTestCardsProps) => {
 
   // --- Grid State UI (Triggers if data exists) ---
   return (
-    <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-      {tests.map((test) => (
+    <>
+      {loadingMessage && <FullScreenLoader message={loadingMessage} />}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        {tests.map((test) => (
         <div 
           key={test.id} 
           className="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm hover:shadow-md transition-shadow"
@@ -92,14 +97,30 @@ const AdminTestCards = ({ tests }: AdminTestCardsProps) => {
             </div>
           </div>
 
-          <Link href={`/admin/dashboard/test/${test.id}/submissions`} className="block w-full sm:w-44">
-            <button className="w-full py-3 border-2 border-[#8b5cf6] text-[#8b5cf6] font-bold rounded-2xl hover:bg-[#8b5cf6] hover:text-white transition-all active:scale-95">
-              View Candidates
-            </button>
-          </Link>
+          <div className="flex gap-4">
+            <Link 
+              href={`/admin/dashboard/test/${test.id}/edit`} 
+              onClick={() => loadingMessage ? {} : setLoadingMessage("Loading edit details...")}
+              className="block w-full sm:w-auto"
+            >
+              <button className="px-8 py-3 border-2 border-gray-200 text-gray-500 font-bold rounded-2xl hover:bg-gray-50 transition-all active:scale-95">
+                Edit
+              </button>
+            </Link>
+            <Link 
+              href={`/admin/dashboard/test/${test.id}/submissions`} 
+              onClick={() => loadingMessage ? {} : setLoadingMessage("Loading candidates...")}
+              className="block w-full sm:flex-1"
+            >
+              <button className="w-full py-3 border-2 border-[#8b5cf6] bg-[#8b5cf6] text-white font-bold rounded-2xl hover:bg-[#7c3aed] transition-all active:scale-95">
+                View Candidates
+              </button>
+            </Link>
+          </div>
         </div>
       ))}
-    </div>
+      </div>
+    </>
   )
 }
 

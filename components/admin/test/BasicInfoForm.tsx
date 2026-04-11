@@ -4,12 +4,13 @@ import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useTestCreationStore } from '@/app/store/useTestCreationStore';
 import { BasicInfoFormData, basicInfoSchema } from '@/app/schema/testSchema';
-import { useCreateExam } from '@/hooks/useExams';
+import { useCreateExam, useUpdateExam } from '@/hooks/useExams';
 import { toast } from 'sonner';
 
 const BasicInfoForm = () => {
   const { basicInfo, updateBasicInfo, setStep, setExamId, examId } = useTestCreationStore();
   const createExam = useCreateExam();
+  const updateExam = useUpdateExam();
   const [isSaving, setIsSaving] = useState(false);
 
   const {
@@ -24,16 +25,9 @@ const BasicInfoForm = () => {
   const onSubmit = async (data: BasicInfoFormData) => {
     updateBasicInfo(data);
 
-    // If exam already created (editing), just go to step 2
-    if (examId) {
-      setStep(2);
-      return;
-    }
-
-    // Create exam on backend
     setIsSaving(true);
     try {
-      const result = await createExam.mutateAsync({
+      const payload = {
         title: data.title,
         totalCandidates: Number(data.totalCandidates),
         totalSlots: Number(data.totalSlots),
@@ -43,13 +37,20 @@ const BasicInfoForm = () => {
         endTime: data.endTime,
         duration: Number(data.duration),
         negativeMarking: data.negativeMarking || "No Negative Marking",
-      });
+      };
 
-      setExamId(result._id);
-      toast.success("Exam created successfully!");
-      setStep(2);
+      if (examId) {
+        await updateExam.mutateAsync({ id: examId, ...payload });
+        toast.success("Exam updated successfully!");
+        setStep(2);
+      } else {
+        const result = await createExam.mutateAsync(payload);
+        setExamId(result._id);
+        toast.success("Exam created successfully!");
+        setStep(2);
+      }
     } catch (error: any) {
-      toast.error(error?.response?.data?.message || "Failed to create exam");
+      toast.error(error?.response?.data?.message || "Failed to save exam");
     } finally {
       setIsSaving(false);
     }

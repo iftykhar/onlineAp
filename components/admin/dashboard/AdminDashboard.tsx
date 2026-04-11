@@ -2,6 +2,8 @@
 
 import React from 'react'
 import { Search } from 'lucide-react'
+import TestCardSkeleton from '@/components/shared/TestCardSkeleton'
+import FullScreenLoader from '@/components/shared/FullScreenLoader'
 import AdminTestCards from '@/components/admin/dashboard/AdminTestCards'
 import Link from 'next/link';
 import { useExams } from '@/hooks/useExams';
@@ -9,6 +11,7 @@ import { useExams } from '@/hooks/useExams';
 const AdminDashboard = () => {
   const [searchTerm, setSearchTerm] = React.useState("");
   const [debouncedSearch, setDebouncedSearch] = React.useState("");
+  const [isNavigating, setIsNavigating] = React.useState(false);
 
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -23,6 +26,7 @@ const AdminDashboard = () => {
 
   return (
     <div className='container mx-auto py-10 px-4'>
+      {isNavigating && <FullScreenLoader message="Opening Test Builder..." />}
       
       {/* Header Section */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-8 gap-4">
@@ -46,7 +50,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Button */}
-        <Link href="/admin/dashboard/test">
+        <Link href="/admin/dashboard/test" onClick={() => setIsNavigating(true)}>
         <button className="w-full sm:w-40 py-2.5 bg-[#8b5cf6] text-white font-semibold rounded-xl hover:bg-[#7c3aed] transition-colors">
           Create Test
         </button>
@@ -56,8 +60,8 @@ const AdminDashboard = () => {
 
       {/* Loading State */}
       {isLoading && (
-        <div className="flex justify-center items-center py-20">
-          <div className="w-8 h-8 border-4 border-purple-200 border-t-purple-600 rounded-full animate-spin" />
+        <div className="mt-8">
+          <TestCardSkeleton />
         </div>
       )}
 
