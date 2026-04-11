@@ -246,14 +246,24 @@ export default function ExamPage() {
               <div className="text-center py-10 text-slate-500">No questions available for this exam.</div>
             )}
 
-            <div className="flex flex-col sm:flex-row sm:justify-between mt-12 space-y-4 sm:space-y-0">
-              <button 
-                onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
-                className="px-6 py-3 border rounded-xl hover:bg-gray-50 disabled:opacity-50 transition-colors bg-white font-semibold"
-                disabled={currentQuestionIndex === 0 || isSubmitting}
-              >
-                Previous
-              </button>
+            <div className="flex flex-col sm:flex-row sm:justify-between mt-12 gap-4">
+              <div className="flex gap-4">
+                <button 
+                  onClick={() => setCurrentQuestionIndex(prev => Math.max(0, prev - 1))}
+                  className="px-6 py-3 border rounded-xl hover:bg-gray-50 disabled:opacity-50 transition-colors bg-white font-semibold flex-1 sm:flex-none"
+                  disabled={currentQuestionIndex === 0 || isSubmitting}
+                >
+                  Previous
+                </button>
+
+                <button 
+                  onClick={() => setCurrentQuestionIndex(prev => prev + 1)}
+                  disabled={currentQuestionIndex === (examData.questions?.length || 1) - 1 || isSubmitting}
+                  className="px-6 py-3 border border-slate-200 rounded-xl hover:bg-slate-50 disabled:opacity-50 transition-colors text-slate-600 font-semibold flex-1 sm:flex-none"
+                >
+                  Skip
+                </button>
+              </div>
 
               <button 
                 onClick={() => {
