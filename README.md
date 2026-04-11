@@ -1,15 +1,16 @@
-# 🎓 Online Assessment Platform
+# Online Assessment Platform
 
 A premium, full-stack assessment platform built with **Next.js 15**, **React 19**, and a dedicated **Express/MongoDB** backend. This project features high-fidelity UI design, rich-text support, and robust candidate tracking.
 
 ---
 
-## 🚀 Live Demo & Video
+## Live Demo & Video
 - **Live Demo**: [online-ap.vercel.app](https://online-ap.vercel.app/)
 - **Video Recording**: [Google Drive Link](https://drive.google.com/file/d/1vjrA8spWmlALn5O1GJ-H4jkVI4XM-t4U/view?usp=sharing)
 - **Interactive Task List**: [Google Sheet](https://docs.google.com/spreadsheets/d/1LgImX2NAMlpvjj4qxuXj3l-HP4XnQaoOyb0ErzNEyVY/edit?gid=0#gid=0)
+- **Backend Repository**: [GitHub](https://github.com/iftykhar/onlineAp_backend.git)
 
-### 🔐 Demo Credentials
+###  Demo Credentials
 | Role | Email | Password |
 | :--- | :--- | :--- |
 | **Examiner** | `examiner@example.com` | `password123` |
@@ -17,15 +18,15 @@ A premium, full-stack assessment platform built with **Next.js 15**, **React 19*
 
 ---
 
-## ✨ Features
+##  Features
 
-### 🏢 Employer (Admin) Panel
+###  Employer (Admin) Panel
 - **Multi-Step Test Creation**: Streamlined workflow to set up basic info and question sets.
 - **Rich Text Questions**: Create complex questions with links, formatting, and images.
 - **Dynamic Question Sets**: Support for Radio, Checkbox, Text, and Rich Text types.
 - **Candidate Overview**: Monitor total slots and candidate participation via the dashboard.
 
-### ✍️ Candidate (Student) Panel
+###  Candidate (Student) Panel
 - **Immersive Exam Screen**: Clean, focused UI for taking tests.
 - **Interactive Timer**: Real-time countdown with automatic submission on timeout.
 - **Anti-Cheat System**: Integrated Tab-switch detection and behavioral tracking.
@@ -33,7 +34,7 @@ A premium, full-stack assessment platform built with **Next.js 15**, **React 19*
 
 ---
 
-## 🛠️ Tech Stack
+##  Tech Stack
 
 - **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS 4.
 - **State Management**: Zustand.
