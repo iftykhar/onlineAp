@@ -97,9 +97,12 @@ const QuestionSet = () => {
                     {idx + 1}
                   </div>
                   <div>
-                    <h4 className="text-xl font-bold text-slate-800 leading-tight mb-2">{q.title}</h4>
+                    <div 
+                      className="text-xl font-bold text-slate-800 leading-tight mb-2 rich-text-content"
+                      dangerouslySetInnerHTML={{ __html: q.title }}
+                    />
                     <span className="inline-flex items-center px-2.5 py-1 bg-purple-50 text-[#8b5cf6] text-[10px] font-bold rounded-lg uppercase tracking-widest border border-purple-100">
-                      {q.type}
+                      {q.type === 'rich-text' ? 'Rich Text Answer' : q.type === 'text' ? 'Short Answer' : q.type}
                     </span>
                   </div>
                 </div>
@@ -116,7 +119,7 @@ const QuestionSet = () => {
 
               {/* Dynamic Answer Previews */}
               <div className="pl-[68px] grid gap-3">
-                {q.type !== 'text' ? (
+                {q.type !== 'text' && q.type !== 'rich-text' ? (
                   q.options?.map((opt: string, i: number) => {
                     const isCorrect = Array.isArray(q.correctAnswer) 
                       ? q.correctAnswer.includes(opt) 
@@ -150,9 +153,11 @@ const QuestionSet = () => {
                     );
                   })
                 ) : (
-                  <div className="w-full p-8 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/30 flex flex-col items-center gap-3">
+                  <div className="w-full p-8 rounded-2xl border-2 border-dashed border-slate-100 bg-slate-50/30 flex flex-col items-center gap-3 text-center">
                     <AlignLeft className="w-6 h-6 text-slate-300" />
-                    <p className="text-sm text-slate-400 font-medium italic">Short answer question (Manual Grading)</p>
+                    <p className="text-sm text-slate-400 font-medium italic">
+                      {q.type === 'rich-text' ? 'Rich Text answer' : 'Short answer'} question (Manual Grading)
+                    </p>
                   </div>
                 )}
               </div>

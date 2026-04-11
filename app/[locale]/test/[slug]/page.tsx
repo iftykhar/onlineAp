@@ -7,6 +7,69 @@ import { useAuth } from '@/hooks/useAuth';
 import { AlertCircle } from 'lucide-react';
 import { useParams, useRouter } from 'next/navigation';
 import FullScreenLoader from '@/components/shared/FullScreenLoader';
+import RichTextEditor from '@/components/shared/RichTextEditor';
+
+// Moved QuestionRenderer outside the main component to prevent re-creation and infinite re-renders
+const QuestionRenderer = ({ 
+  question, 
+  answers, 
+  handleAnswerChange 
+}: { 
+  question: any; 
+  answers: Record<string, any>; 
+  handleAnswerChange: (id: string, value: any, isCheckbox?: boolean) => void;
+}) => {
+  const { _id: id, type, options } = question;
+
+  if (type === 'radio' || type === 'checkbox') {
+    return (
+      <div className="space-y-4">
+        {options?.map((opt: string, i: number) => (
+          <label key={i} className="flex items-center p-4 border rounded-xl cursor-pointer hover:bg-indigo-50 transition-colors group">
+            <input 
+              type={type} 
+              name={id} 
+              checked={type === 'radio' ? answers[id] === opt : (answers[id] || []).includes(opt)}
+              onChange={() => handleAnswerChange(id, opt, type === 'checkbox')}
+              className="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500" 
+            />
+            <span className="ml-4 text-gray-700 group-hover:text-indigo-900">{opt}</span>
+          </label>
+        ))}
+      </div>
+    );
+  }
+
+  if (type === 'text') {
+    return (
+      <div className="border rounded-xl overflow-hidden">
+        <div className="bg-gray-50 p-2 border-b flex gap-4 text-gray-500 text-xs font-bold uppercase">
+           <span>Plain Text Setup</span>
+        </div>
+        <textarea 
+          placeholder="Type your explanation here..." 
+          value={answers[id] || ""}
+          onChange={(e) => handleAnswerChange(id, e.target.value)}
+          className="w-full h-48 p-4 outline-none resize-none"
+        />
+      </div>
+    );
+  }
+  
+  if (type === 'rich-text') {
+    return (
+      <div className="w-full">
+        <RichTextEditor 
+          value={answers[id] || ""}
+          onChange={(val) => handleAnswerChange(id, val)}
+          placeholder="Type your detailed formatted answer here..."
+          className="shadow-sm"
+        />
+      </div>
+    );
+  }
+  return null;
+}
 
 export default function ExamPage() {
   const { slug } = useParams() as { slug: string };
@@ -31,17 +94,18 @@ export default function ExamPage() {
 
   // Initialize timer when exam data loads
   useEffect(() => {
-    if (examData && timeLeft === null && !mySubmission) {
+    if (examData && timeLeft === null) {
       setTimeLeft(examData.duration * 60);
     }
-  }, [examData, timeLeft, mySubmission]);
+  }, [examData, timeLeft]);
 
-  // Handle if already submitted
+  /*
   useEffect(() => {
     if (mySubmission) {
       setIsFinished(true);
     }
   }, [mySubmission]);
+  */
 
   const handleAnswerChange = (questionId: string, value: any, isCheckbox: boolean = false) => {
     setAnswers(prev => {
@@ -123,47 +187,6 @@ export default function ExamPage() {
     };
   }, [isFinished, examData]);
 
-  // Question Renderer
-  const QuestionRenderer = ({ question }: { question: any }) => {
-    const { _id: id, type, options } = question;
-
-    if (type === 'radio' || type === 'checkbox') {
-      return (
-        <div className="space-y-4">
-          {options?.map((opt: string, i: number) => (
-            <label key={i} className="flex items-center p-4 border rounded-xl cursor-pointer hover:bg-indigo-50 transition-colors group">
-              <input 
-                type={type} 
-                name={id} 
-                checked={type === 'radio' ? answers[id] === opt : (answers[id] || []).includes(opt)}
-                onChange={() => handleAnswerChange(id, opt, type === 'checkbox')}
-                className="w-5 h-5 text-indigo-600 border-gray-300 focus:ring-indigo-500" 
-              />
-              <span className="ml-4 text-gray-700 group-hover:text-indigo-900">{opt}</span>
-            </label>
-          ))}
-        </div>
-      );
-    }
-
-    if (type === 'text') {
-      return (
-        <div className="border rounded-xl overflow-hidden">
-          <div className="bg-gray-50 p-2 border-b flex gap-4 text-gray-500 text-xs font-bold uppercase">
-             <span>Bold</span> <span>Italic</span> <span>Underline</span>
-          </div>
-          <textarea 
-            placeholder="Type your explanation here..." 
-            value={answers[id] || ""}
-            onChange={(e) => handleAnswerChange(id, e.target.value)}
-            className="w-full h-48 p-4 outline-none resize-none"
-          />
-        </div>
-      );
-    }
-    return null;
-  }
-
   if (isLoadingExam || isLoadingSubmission) {
     return <FullScreenLoader message="Preparing your exam environment..." />;
   }
@@ -224,7 +247,10 @@ export default function ExamPage() {
       <div className="container mx-auto py-10">
         <header className="bg-white container mx-auto rounded-md border-b p-4 sticky top-0 z-10 shadow-sm transition-all">
           <div className="flex justify-between items-center px-4">
-            <div className="text-lg font-medium">Question ({currentQuestionIndex + 1}/{examData.questions?.length || 0})</div>
+            <div className="flex flex-col">
+              <h1 className="text-xl font-bold text-slate-800">{examData.title}</h1>
+              <div className="text-sm font-medium text-slate-400">Question ({currentQuestionIndex + 1}/{examData.questions?.length || 0})</div>
+            </div>
             <div className={`px-6 py-2 rounded-lg font-mono text-xl font-bold ${
               timeLeft !== null && timeLeft < 300 ? 'bg-red-100 text-red-600 animate-pulse' : 'bg-[#f1f5f9] text-slate-800'
             }`}>
@@ -237,10 +263,18 @@ export default function ExamPage() {
           <div className="bg-white rounded-2xl border border-gray-100 p-8 shadow-sm">
             {currentQuestion ? (
               <>
-                <h2 className="text-xl font-semibold mb-8">
-                  Q{currentQuestionIndex + 1}. {currentQuestion.title}
-                </h2>
-                <QuestionRenderer question={currentQuestion} />
+                <div className="mb-8 flex items-start gap-2 text-xl font-semibold text-slate-800">
+                  <span className="shrink-0 mt-1">Q{currentQuestionIndex + 1}.</span>
+                  <div 
+                    className="rich-text-content" 
+                    dangerouslySetInnerHTML={{ __html: currentQuestion.title }} 
+                  />
+                </div>
+                <QuestionRenderer 
+                  question={currentQuestion} 
+                  answers={answers} 
+                  handleAnswerChange={handleAnswerChange} 
+                />
               </>
             ) : (
               <div className="text-center py-10 text-slate-500">No questions available for this exam.</div>

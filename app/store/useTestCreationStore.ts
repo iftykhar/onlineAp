@@ -4,7 +4,7 @@ import { persist } from "zustand/middleware";
 interface Question {
   id: string;
   title: string;
-  type: "checkbox" | "radio" | "text";
+  type: "checkbox" | "radio" | "text" | "rich-text";
   options?: string[];
   correctAnswer?: string | string[];
 }

@@ -4,6 +4,7 @@ import { X, Plus, Trash2, CheckCircle2, Circle, Square, Check } from 'lucide-rea
 import { useTestCreationStore } from '@/app/store/useTestCreationStore';
 import { useAddQuestion, useUpdateQuestion } from '@/hooks/useExams';
 import { toast } from 'sonner';
+import RichTextEditor from '@/components/shared/RichTextEditor';
 
 interface QuestionModalProps {
   isOpen: boolean;
@@ -17,7 +18,7 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
   const updateQuestionMutation = useUpdateQuestion();
   
   const [title, setTitle] = useState(initialData?.title || '');
-  const [type, setType] = useState<'radio' | 'checkbox' | 'text'>(initialData?.type || 'radio');
+  const [type, setType] = useState<'radio' | 'checkbox' | 'text' | 'rich-text'>(initialData?.type || 'radio');
   const [options, setOptions] = useState<string[]>(initialData?.options || ['', '']);
   const [isSaving, setIsSaving] = useState(false);
   
@@ -71,12 +72,14 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
   };
 
   const handleSave = async () => {
-    if (!title.trim()) return toast.error("Please enter a question title");
+    if (!title.trim() || title === '<p><br></p>') return toast.error("Please enter a question title");
     
     const finalOptions = options.filter(opt => opt.trim() !== '');
-    if (type !== 'text' && finalOptions.length < 2) return toast.error("Please provide at least 2 options");
+    const isTextBased = type === 'text' || type === 'rich-text';
+
+    if (!isTextBased && finalOptions.length < 2) return toast.error("Please provide at least 2 options");
     
-    if (type !== 'text') {
+    if (!isTextBased) {
       if (type === 'radio' && !correctAnswer) return toast.error("Please select a correct answer");
       if (type === 'checkbox' && (!Array.isArray(correctAnswer) || correctAnswer.length === 0)) return toast.error("Please select at least one correct answer");
     }
@@ -88,8 +91,8 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
     const payload = {
       title,
       type,
-      options: type === 'text' ? [] : finalOptions,
-      correctAnswer: type === 'text' ? null : correctAnswer,
+      options: isTextBased ? [] : finalOptions,
+      correctAnswer: isTextBased ? null : correctAnswer,
     };
 
     setIsSaving(true);
@@ -146,36 +149,35 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
           {/* Question Title */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Question Title</label>
-            <textarea
+            <RichTextEditor
               value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              placeholder="Type your question here..."
-              className="w-full p-4 rounded-2xl border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-100 min-h-[100px] resize-none text-slate-700"
+              onChange={setTitle}
+              placeholder="Type your question title or description here..."
             />
           </div>
 
           {/* Question Type Selection */}
           <div className="space-y-2">
             <label className="text-sm font-semibold text-slate-700">Question Type</label>
-            <div className="flex gap-3">
-              {(['radio', 'checkbox', 'text'] as const).map((t) => (
+            <div className="flex gap-2 flex-wrap">
+              {(['radio', 'checkbox', 'text', 'rich-text'] as const).map((t) => (
                 <button
                   key={t}
                   onClick={() => setType(t)}
-                  className={`flex-1 py-3 px-2 rounded-xl border-2 transition-all capitalize font-bold text-sm ${
+                  className={`flex-1 py-3 px-2 rounded-xl border-2 transition-all capitalize font-bold text-sm min-w-[120px] ${
                     type === t 
                     ? 'border-[#8b5cf6] bg-purple-50 text-[#8b5cf6]' 
                     : 'border-gray-100 text-gray-400 hover:border-gray-200'
                   }`}
                 >
-                  {t === 'radio' ? 'Single Choice' : t === 'checkbox' ? 'Multiple Choice' : 'Short Answer'}
+                  {t === 'radio' ? 'Single Choice' : t === 'checkbox' ? 'Multiple Choice' : t === 'text' ? 'Short Answer' : 'Rich Text Answer'}
                 </button>
               ))}
             </div>
           </div>
 
           {/* Options Section */}
-          {type !== 'text' && (
+          {type !== 'text' && type !== 'rich-text' && (
             <div className="space-y-4">
               <div className="flex justify-between items-center">
                 <label className="text-sm font-semibold text-slate-700 flex items-center gap-2">
@@ -233,9 +235,9 @@ const QuestionModal = ({ isOpen, onClose, initialData }: QuestionModalProps) => 
             </div>
           )}
 
-          {type === 'text' && (
+          {(type === 'text' || type === 'rich-text') && (
             <div className="p-6 bg-slate-50 border-2 border-dashed border-slate-200 rounded-2xl text-center">
-              <p className="text-sm text-slate-400 font-medium">No options needed for short answer questions.</p>
+              <p className="text-sm text-slate-400 font-medium">No options needed for {type === 'text' ? 'short answer' : 'rich text'} questions.</p>
             </div>
           )}
         </div>

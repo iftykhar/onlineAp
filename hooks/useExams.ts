@@ -19,7 +19,7 @@ export interface ExamData {
   questions: {
     _id: string;
     title: string;
-    type: "radio" | "checkbox" | "text";
+    type: "radio" | "checkbox" | "text" | "rich-text";
     options?: string[];
     correctAnswer?: string | string[];
   }[];
@@ -161,7 +161,7 @@ export function useAddQuestion() {
       examId: string;
       question: {
         title: string;
-        type: "radio" | "checkbox" | "text";
+        type: "radio" | "checkbox" | "text" | "rich-text";
         options?: string[];
         correctAnswer?: string | string[];
       };
@@ -192,7 +192,7 @@ export function useUpdateQuestion() {
       questionId: string;
       data: Partial<{
         title: string;
-        type: "radio" | "checkbox" | "text";
+        type: "radio" | "checkbox" | "text" | "rich-text";
         options?: string[];
         correctAnswer?: string | string[];
       }>;
