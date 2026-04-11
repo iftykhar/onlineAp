@@ -10,12 +10,11 @@ const OnlineTest = () => {
   const currentStep = useTestCreationStore((state) => state.currentStep);
 
   return (
-    <div className="min-h-screen bg-[#f8fafc] pb-20 px-6">
+    <div className="min-h-[calc(100vh-140px)] bg-gray-50 pb-20 px-6">
       <div className="container mx-auto py-10">
         <OnlinteTestHead />
         
         <main className="mt-8 space-y-6">
-          {/* Transition: Step 1 (Form) vs Step 2 (Summary) */}
           {currentStep === 1 ? (
             <BasicInfoForm />
           ) : (

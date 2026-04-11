@@ -15,7 +15,7 @@ const CompletionScreen = ({ userName, examTitle, isTimeout }: Props) => {
   return (
     <>
       {isNavigating && <FullScreenLoader message="Returning to Dashboard..." />}
-      <div className="min-h-screen py-5">
+      <div className="min-h-[calc(100vh-140px)] bg-gray-50 py-5 shadow-sm">
           <div className="max-w-4xl w-full mx-auto bg-white border border-gray-100 rounded-[32px] p-12 md:p-20 shadow-sm text-center">
           {/* Dynamic Icon Section */}
           <div className="flex justify-center mb-8">
@@ -52,7 +52,7 @@ const CompletionScreen = ({ userName, examTitle, isTimeout }: Props) => {
                 setIsNavigating(true);
                 window.location.href = '/dashboard';
               }}
-              className="px-12 py-4 border border-gray-200 rounded-2xl font-bold text-[#334155] hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
+              className="px-12 py-4 border cursor-pointer border-gray-200 rounded-2xl font-bold text-[#334155] hover:bg-gray-50 transition-all active:scale-95 shadow-sm"
           >
               Back to Dashboard
           </button>

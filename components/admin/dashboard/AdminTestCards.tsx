@@ -47,7 +47,7 @@ const AdminTestCards = ({ tests }: AdminTestCardsProps) => {
         {tests.map((test) => (
         <div 
           key={test.id} 
-          className="bg-white border border-gray-100 rounded-[32px] p-8 shadow-sm hover:shadow-md transition-shadow"
+          className="bg-white border border-gray-200 rounded-[32px] p-8  transition-shadow"
         >
           <div className="flex items-start justify-between mb-4">
             <h2 className="text-xl font-bold text-[#334155] leading-tight flex-1 mr-3">{test.title}</h2>
@@ -97,25 +97,26 @@ const AdminTestCards = ({ tests }: AdminTestCardsProps) => {
             </div>
           </div>
 
-          <div className="flex gap-4">
-            <Link 
-              href={`/admin/dashboard/test/${test.id}/edit`} 
-              onClick={() => loadingMessage ? {} : setLoadingMessage("Loading edit details...")}
-              className="block w-full sm:w-auto"
-            >
-              <button className="px-8 py-3 border-2 border-gray-200 text-gray-500 font-bold rounded-2xl hover:bg-gray-50 transition-all active:scale-95">
-                Edit
-              </button>
-            </Link>
+          <div className="flex justify-between gap-6">
             <Link 
               href={`/admin/dashboard/test/${test.id}/submissions`} 
               onClick={() => loadingMessage ? {} : setLoadingMessage("Loading candidates...")}
               className="block w-full sm:flex-1"
             >
-              <button className="w-full py-3 border-2 border-[#8b5cf6] bg-[#8b5cf6] text-white font-bold rounded-2xl hover:bg-[#7c3aed] transition-all active:scale-95">
+              <button className="w-[40%] py-3 border-2 px-2 border-primary text-primary cursor-pointer bg-white font-bold rounded-2xl hover:bg-primary/10 transition-all active:scale-95">
                 View Candidates
               </button>
             </Link>
+            <Link 
+              href={`/admin/dashboard/test/${test.id}/edit`} 
+              onClick={() => loadingMessage ? {} : setLoadingMessage("Loading edit details...")}
+              className="block w-full sm:w-auto"
+            >
+              <button className="px-8 py-3 cursor-pointer border-2 border-gray-200 text-gray-500 font-bold rounded-2xl hover:bg-gray-50 transition-all active:scale-95">
+                Edit
+              </button>
+            </Link>
+            
           </div>
         </div>
       ))}

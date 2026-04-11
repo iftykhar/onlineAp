@@ -170,12 +170,12 @@ export default function ExamPage() {
 
   if (examError || !examData) {
     return (
-      <div className="min-h-screen bg-[#f8fafc] flex justify-center items-center">
+      <div className="min-h-screen bg-gray-50 flex justify-center items-center">
         <div className="text-center p-8 bg-white rounded-2xl shadow-sm">
           <AlertCircle className="w-12 h-12 text-red-500 mx-auto mb-4" />
           <h2 className="text-xl font-bold text-slate-800">Exam not available</h2>
           <p className="text-slate-500 mt-2">This exam may be closed or doesn't exist.</p>
-          <button onClick={() => router.push('/dashboard')} className="mt-6 px-6 py-2 bg-indigo-600 text-white rounded-lg">
+          <button onClick={() => router.push('/dashboard')} className="mt-6 px-6 py-2 cursor-pointer bg-indigo-600 text-white rounded-lg">
             Go to Dashboard
           </button>
         </div>

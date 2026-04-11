@@ -264,6 +264,19 @@ export function useMySubmission(examId: string) {
   });
 }
 
+export function useMyAttempts(examId: string) {
+  return useQuery({
+    queryKey: ["my-attempts", examId],
+    queryFn: async () => {
+      const { data } = await axiosInstance.get(
+        `/submission/${examId}/my-attempts`
+      );
+      return data.data;
+    },
+    enabled: !!examId,
+  });
+}
+
 export function useExamSubmissions(examId: string) {
   return useQuery({
     queryKey: ["exam-submissions", examId],

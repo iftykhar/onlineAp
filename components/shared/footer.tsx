@@ -4,35 +4,36 @@ import { Phone, Mail } from 'lucide-react'; // optional icons
 
 const Footer = () => {
   return (
-    <footer className="bg-[#111827] text-white py-6 px-8">
+    <footer className="bg-[#111827] text-white py-12 px-8">
       <div className="container mx-auto">
-
-        <div className="flex flex-col md:flex-row justify-start md:justify-between items-start md:items-center gap-6">
+        <div className="flex flex-col md:flex-row justify-between items-center gap-8">
           
           {/* Left Section: Branding */}
-          <div className="flex items-center gap-3">
-            <span className="text-sm font-medium">Powered by</span>
-            <Image
-              src="/images/logowhite.png"
-              alt="Akij Resource Logo"
-              width={100}
-              height={40}
-              className="object-contain"
-            />
+          <div className="flex items-center gap-4">
+            <span className="text-lg font-medium text-gray-400 font-sans">Powered by</span>
+            <div className="flex items-center gap-2">
+              <Image
+                src="/images/logowhite.png"
+                alt="Akij Resource Logo"
+                width={120}
+                height={40}
+                className="object-contain cursor-pointer"
+              />
+            </div>
           </div>
 
           {/* Right Section: Contact Info */}
-          <div className="flex flex-col md:flex-row justify-start gap-2 text-sm">
-            <div className="flex items-center gap-2">
-              
-              <span className="font-medium">Helpline</span>
-              <Phone size={16} className="text-gray-400" />
-              <span>+8801712345678</span>
+          <div className="flex flex-col md:flex-row items-center gap-8 text-sm">
+            <div className="flex items-center gap-3">
+              <span className="font-semibold text-gray-300">Helpline</span>
+              <div className="flex items-center gap-2 text-gray-100 italic">
+                 <Phone size={18} className="text-[#8b5cf6]" />
+                 <span className="text-base ">+88 011020202505</span>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Mail size={16} className="text-gray-400" />
-              {/* <span className="font-medium">Email:</span> */}
-              <span>support@akij.work</span>
+            <div className="flex items-center gap-2 text-gray-100 italic">
+              <Mail size={18} className="text-[#8b5cf6]" />
+              <span className="text-base">support@akij.work</span>
             </div>
           </div>
 

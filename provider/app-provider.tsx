@@ -14,7 +14,7 @@ function AppContent({ children }: { children: React.ReactNode }) {
   const currentLocale = useLocale();
   const { data: session } = useSession();
 
-  const hideNavAndFooter = [`/${currentLocale}/auth/signin`];
+  const hideNavAndFooter: string[] = [];
 
   return (
     <QueryClientProvider client={queryClient}>

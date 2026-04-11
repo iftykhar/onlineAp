@@ -120,7 +120,7 @@ export function ForgetPasswordForm() {
                     <Button
                       type="submit"
                       disabled={isLoading}
-                      className="w-full h-10 sm:h-12 pt-4 bg-primary hover:bg-primary/90 text-sm sm:text-base font-bold text-white cursor-pointer"
+                      className="w-full h-10 sm:h-12 pt-4  bg-primary hover:bg-primary/90 text-sm sm:text-base font-bold text-white cursor-pointer"
                     >
                       {isLoading ? "Resetting..." : "Reset Password"}
                     </Button>

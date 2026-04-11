@@ -63,9 +63,9 @@ const UserDashboard = () => {
       {!isLoading && filteredExams.length > 0 && (
         <div className="mt-8 flex justify-between items-center text-sm text-gray-500">
           <div className="flex items-center gap-2">
-            <button className="p-2 border rounded-md bg-white hover:bg-gray-50 disabled:opacity-50"> &lt; </button>
+            <button className="p-2 border rounded-md cursor-pointer bg-white hover:bg-gray-50 disabled:opacity-50"> &lt; </button>
             <span className="px-4 py-2 bg-gray-100 rounded-md text-gray-900 font-medium">1</span>
-            <button className="p-2 border rounded-md bg-white hover:bg-gray-50"> &gt; </button>
+            <button className="p-2 border rounded-md cursor-pointer bg-white hover:bg-gray-50"> &gt; </button>
           </div>
           
           <div className="flex items-center gap-4">

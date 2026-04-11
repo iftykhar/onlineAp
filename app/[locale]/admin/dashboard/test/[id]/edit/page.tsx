@@ -58,7 +58,7 @@ export default function EditTestPage() {
 
   if (error) {
     return (
-      <div className="min-h-screen bg-[#f8fafc] flex justify-center items-center text-red-500 font-medium">
+      <div className="min-h-[calc(100vh-140px)] bg-[#f8fafc] flex justify-center items-center text-red-500 font-medium">
         Failed to load exam details.
       </div>
     );
