@@ -86,6 +86,6 @@ To ensure a resilient candidate experience during network failures:
 
 ---
 
-## 🤝 Contact
+<!-- ## 🤝 Contact
 - **Email**: support@akij.work
-- **Helpline**: +88 011020202505
+- **Helpline**: +88 011020202505 -->
