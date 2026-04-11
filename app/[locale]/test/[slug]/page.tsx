@@ -161,7 +161,6 @@ export default function ExamPage() {
     return () => clearInterval(timer);
   }, [timeLeft, isFinished, handleSubmit]);
 
-  // Anti-Cheat: Tab Switching / Fullscreen exit detection
   useEffect(() => {
     if (isFinished || !examData) return;
     
@@ -171,8 +170,6 @@ export default function ExamPage() {
         setShowWarningModal(true);
       }
     };
-    
-    // Some browsers use blur/focus on window for tab switches
     const handleWindowBlur = () => {
       setTabSwitchCount(prev => prev + 1);
       setShowWarningModal(true);

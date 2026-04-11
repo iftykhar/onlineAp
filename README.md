@@ -1,108 +1,91 @@
-# Next.js 15 Advanced Boilerplate
+# 🎓 Online Assessment Platform
 
-A production-ready, feature-rich boilerplate built with Next.js 15 (App Router) & React 19. This template is designed to significantly reduce setup time for modern web applications by pre-configuring essential modules for authentication, data fetching, internationalization, form handling, UI components, and strict code quality tools.
+A premium, full-stack assessment platform built with **Next.js 15**, **React 19**, and a dedicated **Express/MongoDB** backend. This project features high-fidelity UI design, rich-text support, and robust candidate tracking.
 
-## 🚀 Features Included
+---
 
-- **Framework**: [Next.js 15](https://nextjs.org/) (App Router) & React 19
-- **Language**: [TypeScript](https://www.typescriptlang.org/) for robust static typing.
-- **Styling**: [Tailwind CSS v4](https://tailwindcss.com/) & `tw-animate-css` for rapid, responsive UI development.
-- **UI Components**: [shadcn/ui](https://ui.shadcn.com/) (built on Radix UI) with pre-installed primitives (Button, Card, Form, Input, Navigation Menu, Sheet, etc.).
-- **Icons**: [Lucide React](https://lucide.dev/).
-- **Form Handling & Validation**: [React Hook Form](https://react-hook-form.com/) integrated with [Zod](https://zod.dev/) for schema validation.
-- **Data Fetching**: [TanStack React Query v5](https://tanstack.com/query) paired with [Axios](https://axios-http.com/) for optimized client-side state and request management.
-- **Authentication**: [NextAuth.js v4](https://next-auth.js.org/) pre-configured with UI forms for Login and Signup.
-- **Internationalization (i18n)**: [next-intl](https://next-intl-docs.vercel.app/) setup with dynamic routing. Currently supports English (`en`) and Bengali (`bn`).
-- **Notifications**: [Sonner](https://sonner.emilkowal.ski/) for elegant toast notifications.
-- **Code Quality & Workflow**:
-  - **ESLint** (v9) & Prettier for code formatting and standard checking.
-  - **Husky** for automatic Git hooks management.
-  - **lint-staged** runs linting & fixes strictly on staged files.
-  - **Commitlint** to strictly enforce conventional commit messages.
+## 🚀 Live Demo & Video
+- **Live Demo**: [online-ap.vercel.app](https://online-ap.vercel.app/)
+- **Video Recording**: [Google Drive Link](https://drive.google.com/file/d/1vjrA8spWmlALn5O1GJ-H4jkVI4XM-t4U/view?usp=sharing)
 
-## 📁 Project Structure
+### 🔐 Demo Credentials
+| Role | Email | Password |
+| :--- | :--- | :--- |
+| **Examiner** | `examiner@example.com` | `password123` |
+| **Candidate** | `candidate@example.com` | `password123` |
 
-This boilerplate strictly follows a scalable directory structure:
+---
 
-- `app/` - Next.js App Router (handles i18n `[locale]` routing, `layout.tsx`, `globals.css`).
-- `components/`
-  - `application/` - Specific app views (e.g., custom `not-found-content.tsx`).
-  - `auth/` - NextAuth integrated forms (`login-form.tsx`, `signup-form.tsx`).
-  - `shared/` - Global layout components (`navbar.tsx`, `footer.tsx`, `language-switcher.tsx`).
-  - `ui/` - Reusable shadcn/ui generic components.
-- `i18n/` - i18n configurations (`request.ts`, `routing.ts`).
-- `messages/` - JSON dictionaries for translations (`en.json`, `bn.json`).
-- `lib/` - Utility functions, custom hooks, and the Axios singleton setup (`api.ts`).
-- `provider/` - Global context providers. `app-provider.tsx` encapsulates `QueryClientProvider` and conditionally renders the Navbar/Footer (hiding them on auth pages).
-- `types/` - Global TypeScript type definitions (e.g., `next-auth.d.ts`).
+## ✨ Features
 
-## 🛠️ Getting Started
+### 🏢 Employer (Admin) Panel
+- **Multi-Step Test Creation**: Streamlined workflow to set up basic info and question sets.
+- **Rich Text Questions**: Create complex questions with links, formatting, and images.
+- **Dynamic Question Sets**: Support for Radio, Checkbox, Text, and Rich Text types.
+- **Candidate Overview**: Monitor total slots and candidate participation via the dashboard.
 
-First, install the dependencies:
+### ✍️ Candidate (Student) Panel
+- **Immersive Exam Screen**: Clean, focused UI for taking tests.
+- **Interactive Timer**: Real-time countdown with automatic submission on timeout.
+- **Anti-Cheat System**: Integrated Tab-switch detection and behavioral tracking.
+- **Premium Rich Text Answers**: Candidates can provide long-form, formatted responses.
 
-```bash
-npm install
-# or
-yarn install
-# or
-pnpm install
-```
+---
 
-### Environment Variables
+## 🛠️ Tech Stack
 
-If required by your setup (especially API and NextAuth), create a `.env.local` or `.env` file in the root. Example variables the boilerplate expects:
+- **Frontend**: Next.js 15 (App Router), React 19, Tailwind CSS 4.
+- **State Management**: Zustand.
+- **Data Fetching**: TanStack React Query v5 & Axios.
+- **Rich Text**: Custom Quill.js Implementation (React 19 optimized).
+- **Form Handling**: React Hook Form + Zod validation.
+- **Backend API**: Integrated Express.js & MongoDB (deployed separately).
 
-```env
-NEXT_PUBLIC_API_URL=http://your-api-url.com/api
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=your_super_secret_string
-```
+---
 
-### Run the Development Server
+##  Additional Questions & Solutions (Assignment Requirements)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+###  MCP Integration (Model Context Protocol)
+I haven’t directly worked with a formal implementation of *Model Context Protocol (MCP)* yet, but I understand it as a framework for enabling structured communication between AI models and external tools. In this project, MCP could be highly valuable:
+- **Figma MCP**: Extracting design tokens/components automatically to ensure development-to-design parity.
+- **Chrome DevTools MCP**: Real-time AI debugging of layout and performance issues during testing.
+- **Supabase MCP**: Scaffolding backend APIs and real-time data streaming logic faster.
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result. The application will immediately redirect you to the default locale route (e.g., `/en`).
+###  AI Tools for Development
+I leverage modern AI tools to accelerate the development lifecycle:
+- **Claude (Claude Code)**: For structured reasoning and understanding complex codebases.
+- **ChatGPT**: Used for logic building, debugging, and drafting reusable components.
+- **GitHub Copilot**: For rapid scaffolding and iterative refinements.
+- **Gemini**: For quick UI experimentation and alternative logic suggestions.
 
-## ⚙️ Development Workflow
+###  Offline Mode Handling
+To ensure a resilient candidate experience during network failures:
+- **Local Persistence**: Continuously save answers to `localStorage` or `IndexedDB`.
+- **Offline Detection**: Real-time monitoring of network status with clear UI feedback ("You are offline. Progress is saved locally.").
+- **Auto-Sync**: Background synchronization with the server immediately upon connection restoration.
+- **Client-Side Timer**: Maintaining the exam countdown using local system time to prevent time loss.
 
-### Committing Changes
+---
 
-This boilerplate enforces **Conventional Commits** using Husky and Commitlint. Before a commit is finalized, `lint-staged` will automatically run formatting and linting on your staged files.
+## Getting Started
 
-Example of a valid commit message:
-```bash
-git commit -m "feat: add user profile component"
-git commit -m "fix: resolve login form hydration error"
-```
-If you provide an invalid commit message, the commit will be rejected.
+### Prerequisites
+- Node.js 18.18+
+- Backend API (Ensure `.env` points to the correct endpoint)
 
-## ⚙️ How to Customize and Extend
+### Installation
+1. Clone the repository
+2. Install dependencies: `npm install`
+3. Configure environment:
+   ```env
+   NEXT_PUBLIC_BACKEND_API_URL=http://localhost:5000/api/v1
+   NEXTAUTH_URL=http://localhost:3000
+   NEXTAUTH_SECRET=your_secret
+   ```
+4. Run locally: `npm run dev`
 
-### 1. Adding New UI Components
-This project uses `shadcn/ui`. To add a new component, use the shadcn CLI:
-```bash
-npx shadcn@latest add <component-name>
-```
-The new component will be placed automatically in `components/ui/`.
+---
 
-### 2. Modifying API & Data Fetching
-- The Axios instance is configured in `lib/api.ts`. You can attach interceptors for auth tokens or global error handling here.
-- React Query is wrapped internally in `provider/app-provider.tsx`.
-
-### 3. Updating Translations
-To add new text or support a new language:
-1. Update `messages/en.json` and `messages/bn.json` with your new key-value pairs.
-2. If adding a completely new language, create a new `<locale>.json` file in `messages/` and update `i18n/routing.ts` to include the new locale in the `locales` array.
-
-### 4. Layout & Providers
-The main global wrapper is `provider/app-provider.tsx`. If you need to add new global contexts (like Redux, ThemeProvider, etc.), wrap them inside components in this file. The Navbar and Footer are also conditionally rendered here.
-
-## 🤝 Contributing
-Contributions, issues, and feature requests are welcome! Feel free to check the issues page.
+## 🤝 Contact
+- **Email**: support@akij.work
+- **Helpline**: +88 011020202505
