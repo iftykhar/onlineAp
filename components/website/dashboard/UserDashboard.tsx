@@ -6,16 +6,19 @@ import { Search } from 'lucide-react'
 import { useAvailableExams } from '@/hooks/useExams'
 
 const UserDashboard = () => {
-  const { data: exams, isLoading, error } = useAvailableExams();
   const [searchTerm, setSearchTerm] = useState("");
+  const [debouncedSearch, setDebouncedSearch] = useState("");
 
-  const filteredExams = useMemo(() => {
-    if (!exams) return [];
-    if (!searchTerm) return exams;
-    return exams.filter((exam) =>
-      exam.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [exams, searchTerm]);
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const { data: exams, isLoading, error } = useAvailableExams(debouncedSearch);
+
+  const filteredExams = exams || [];
 
   return (
     <div className='container mx-auto py-10 px-4'>

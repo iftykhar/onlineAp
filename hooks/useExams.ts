@@ -32,11 +32,11 @@ export interface ExamData {
 }
 
 // Admin: fetch all exams
-export function useExams() {
+export function useExams(search?: string) {
   return useQuery<ExamData[]>({
-    queryKey: ["exams"],
+    queryKey: ["exams", search],
     queryFn: async () => {
-      const { data } = await axiosInstance.get("/exam");
+      const { data } = await axiosInstance.get("/exam", { params: { search } });
       return data.data;
     },
   });
@@ -115,11 +115,11 @@ export function usePublishExam() {
 }
 
 // Candidate: fetch available published exams
-export function useAvailableExams() {
+export function useAvailableExams(search?: string) {
   return useQuery<ExamData[]>({
-    queryKey: ["available-exams"],
+    queryKey: ["available-exams", search],
     queryFn: async () => {
-      const { data } = await axiosInstance.get("/exam/available");
+      const { data } = await axiosInstance.get("/exam/available", { params: { search } });
       return data.data;
     },
   });

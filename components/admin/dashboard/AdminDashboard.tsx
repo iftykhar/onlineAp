@@ -7,16 +7,19 @@ import Link from 'next/link';
 import { useExams } from '@/hooks/useExams';
 
 const AdminDashboard = () => {
-  const { data: exams, isLoading, error } = useExams();
   const [searchTerm, setSearchTerm] = React.useState("");
+  const [debouncedSearch, setDebouncedSearch] = React.useState("");
 
-  const filteredExams = React.useMemo(() => {
-    if (!exams) return [];
-    if (!searchTerm) return exams;
-    return exams.filter((exam) =>
-      exam.title.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-  }, [exams, searchTerm]);
+  React.useEffect(() => {
+    const timer = setTimeout(() => {
+      setDebouncedSearch(searchTerm);
+    }, 500);
+    return () => clearTimeout(timer);
+  }, [searchTerm]);
+
+  const { data: exams, isLoading, error } = useExams(debouncedSearch);
+  
+  const filteredExams = exams || [];
 
   return (
     <div className='container mx-auto py-10 px-4'>
